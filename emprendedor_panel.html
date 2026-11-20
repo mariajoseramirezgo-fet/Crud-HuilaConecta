@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFDF9">
+  <meta name="robots" content="noindex">
+  <title>Panel del emprendedor · HuilaConecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-privada="true">
+  <a href="#main" class="skip-link">Saltar al contenido</a>
+
+  <header class="app-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="HuilaConecta, ir a la página pública">
+        <span class="brand-mark" data-icon="mountain"></span>
+        <span><span class="brand-name">Huila<span>Conecta</span></span><span class="brand-sub">EMPRENDEDORES</span></span>
+      </a>
+      <div class="app-tools">
+        <button type="button" class="theme-toggle" data-tema-toggle role="switch" aria-checked="false"><span data-icon="moon"></span><span class="theme-label">Modo oscuro</span></button>
+        <div class="app-user">
+          <span class="avatar" id="avatar" aria-hidden="true"></span>
+          <span class="app-user-info"><strong id="nombreUsuario">Emprendedor</strong><span class="muted small">Emprendedor</span></span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btnSalir" aria-label="Cerrar sesión" title="Cerrar sesión"><span data-icon="logout"></span></button>
+      </div>
+    </div>
+    <div class="container">
+      <nav class="app-tabs" role="tablist" aria-label="Secciones del panel">
+        <button type="button" class="tab" role="tab" id="tab-servicios" aria-controls="sec-servicios" data-tab="servicios"><span data-icon="store"></span>Mis servicios</button>
+        <button type="button" class="tab" role="tab" id="tab-cafeteria" aria-controls="sec-cafeteria" data-tab="cafeteria"><span data-icon="coffee"></span>Cafetería Sin Fila <span class="count" id="contadorPedidos" hidden>0</span></button>
+        <button type="button" class="tab" role="tab" id="tab-comunidad" aria-controls="sec-comunidad" data-tab="comunidad"><span data-icon="chat"></span>Comunidad</button>
+        <button type="button" class="tab" role="tab" id="tab-cuenta" aria-controls="sec-cuenta" data-tab="cuenta"><span data-icon="gear"></span>Configuración</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="app-main container" tabindex="-1">
+
+    <!-- ============ MIS SERVICIOS (CRUD) ============ -->
+    <section id="sec-servicios" class="section" role="tabpanel" aria-labelledby="tab-servicios" hidden>
+      <div class="page-head">
+        <div><h1 id="saludo">Mis servicios</h1>
+          <p class="muted">Cada publicación nueva o editada pasa por revisión del administrador antes de aparecer en el catálogo.</p></div>
+        <button type="button" class="btn btn-primary" id="btnNuevoSitio"><span data-icon="plus"></span>Publicar servicio</button>
+      </div>
+      <div class="stats" id="statsEmprendedor"></div>
+      <div class="chip-row" id="filtrosEstado" role="group" aria-label="Filtrar mis servicios por estado"></div>
+      <p class="muted" id="totalSitios" aria-live="polite"></p>
+      <div id="listaSitios" class="section"></div>
+    </section>
+
+    <!-- ============ CAFETERÍA SIN FILA ============ -->
+    <section id="sec-cafeteria" class="section" role="tabpanel" aria-labelledby="tab-cafeteria" hidden>
+      <div class="page-head">
+        <div><h1>Cafetería Sin Fila</h1><p class="muted">Pedidos en tiempo real, resumen de pagos y menú de tus restaurantes (categoría Sabores).</p></div>
+        <span class="live-dot" id="estadoVivo" data-estado="off" aria-live="polite">Conectando…</span>
+      </div>
+      <div class="sub-tabs" role="group" aria-label="Secciones de la cafetería">
+        <button type="button" class="chip" data-sub="pedidos" aria-pressed="true">Pedidos en vivo</button>
+        <button type="button" class="chip" data-sub="pagos" aria-pressed="false">Resumen de pagos</button>
+        <button type="button" class="chip" data-sub="menu" aria-pressed="false">Menú</button>
+      </div>
+
+      <div data-subpanel="pedidos" class="section">
+        <div class="kanban" id="kanban"></div>
+      </div>
+
+      <div data-subpanel="pagos" class="section" hidden>
+        <div class="stats" id="statsPagos"></div>
+        <div class="form-grid cols-2" style="align-items:start">
+          <div class="card card-pad"><h2 class="card-title">Ingresos por método de pago</h2><div class="bar-list" id="barrasMetodo"></div></div>
+          <div class="card card-pad"><h2 class="card-title">Ingresos por sitio</h2><div class="bar-list" id="barrasSitio"></div></div>
+        </div>
+        <div class="card table-wrap">
+          <table class="table">
+            <caption class="sr-only">Últimos movimientos de pago</caption>
+            <thead><tr><th scope="col">Pedido</th><th scope="col">Cliente</th><th scope="col">Método</th><th scope="col">Referencia</th><th scope="col">Estado del pago</th><th scope="col">Total</th></tr></thead>
+            <tbody id="tablaPagos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div data-subpanel="menu" class="section" hidden>
+        <div class="page-head" style="margin:0">
+          <p class="muted">Lo que el turista puede ordenar. Marca "Agotado" para pausar un producto sin borrarlo.</p>
+          <button type="button" class="btn btn-primary" id="btnNuevoProducto"><span data-icon="plus"></span>Nuevo producto</button>
+        </div>
+        <div id="listaMenu" class="section"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMUNIDAD ============ -->
+    <section id="sec-comunidad" class="section" role="tabpanel" aria-labelledby="tab-comunidad" hidden>
+      <div class="page-head"><div><h1>Comunidad</h1><p class="muted">Publica novedades, comenta y reacciona con "Me gusta".</p></div></div>
+      <div id="comunidad" class="section"></div>
+    </section>
+
+    <!-- ============ CONFIGURACIÓN ============ -->
+    <section id="sec-cuenta" class="section" role="tabpanel" aria-labelledby="tab-cuenta" hidden>
+      <div class="page-head"><div><h1>Configuración</h1><p class="muted">Foto de perfil, datos y contraseña.</p></div></div>
+      <div id="cuenta" class="section"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container">HuilaConecta · Panel del emprendedor</div></footer>
+
+  <!-- ============ FORMULARIO DE SERVICIO ============ -->
+  <dialog class="modal modal-lg" id="modalSitio" aria-labelledby="sitioTitulo">
+    <div class="modal-head">
+      <h2 id="sitioTitulo">Publicar servicio</h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body">
+      <form id="formSitio" class="form" novalidate>
+        <input type="hidden" name="id">
+        <p class="note note-info" id="avisoEdicion" hidden>Al guardar los cambios, la publicación volverá a estado <strong>Pendiente</strong> hasta que el administrador la revise.</p>
+        <div class="form-grid cols-2">
+          <div class="field span-2">
+            <label for="sNombre">Nombre del negocio o servicio <span class="req">*</span></label>
+            <input class="input" id="sNombre" name="nombre" maxlength="100" required placeholder="Ej. Café de origen Huila">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="sCategoria">Categoría <span class="req">*</span></label>
+            <select class="select" id="sCategoria" name="categoria" required>
+              <option value="">Selecciona…</option>
+              <option>Experiencias</option><option>Hospedaje</option><option>Sabores</option><option>Transporte</option>
+            </select>
+            <p class="field-hint">Sabores = restaurante o cafetería (podrás crear su menú).</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="sMunicipio">Municipio <span class="req">*</span></label>
+            <input class="input" id="sMunicipio" name="municipio" maxlength="80" data-solo-letras list="municipiosHuila" required placeholder="Ej. Neiva">
+            <datalist id="municipiosHuila">
+              <option>Neiva</option><option>Villavieja</option><option>San Agustín</option><option>Pitalito</option><option>Garzón</option>
+              <option>Rivera</option><option>Isnos</option><option>La Plata</option><option>Gigante</option><option>Yaguará</option>
+            </datalist>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="sPrecio">Precio de referencia (COP) <span class="req">*</span></label>
+            <input class="input" id="sPrecio" name="precio" inputmode="numeric" maxlength="8" data-solo-numeros required placeholder="Ej. 85000">
+            <p class="field-hint">Solo números · entre 1.000 y 50.000.000.</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="sTelefono">Teléfono de contacto <span class="req">*</span></label>
+            <input class="input" id="sTelefono" name="telefono" type="tel" inputmode="numeric" maxlength="10" data-solo-numeros required placeholder="3001234567">
+            <p class="field-hint">Solo números · 10 dígitos.</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field span-2">
+            <label for="sDescripcion">Descripción <span class="req">*</span></label>
+            <textarea class="textarea" id="sDescripcion" name="descripcion" maxlength="1000" required placeholder="¿Qué incluye? ¿Duración? ¿Qué debe llevar el visitante?"></textarea>
+            <p class="field-hint"><span id="contadorDescripcion">0</span>/1000 · mínimo 20 caracteres.</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="span-2" id="sImagen"></div>
+
+          <fieldset class="span-2 fieldset">
+            <legend class="label">Ubicación para el mapa (opcional)</legend>
+            <div class="form-grid cols-2">
+              <div class="field span-2">
+                <label for="sDireccion">Dirección o punto de referencia</label>
+                <input class="input" id="sDireccion" name="direccion" maxlength="160" placeholder="Ej. Calle 8 # 5-32, Centro">
+                <p class="field-error" hidden></p>
+              </div>
+              <div class="field span-2">
+                <label for="sHorario">Horario</label>
+                <input class="input" id="sHorario" name="horario" maxlength="120" placeholder="Ej. Lunes a sábado · 7:00 a. m. a 7:00 p. m.">
+                <p class="field-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="sLatitud">Latitud</label>
+                <input class="input" id="sLatitud" name="latitud" inputmode="decimal" maxlength="10" data-decimal placeholder="2.927300">
+                <p class="field-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="sLongitud">Longitud</label>
+                <input class="input" id="sLongitud" name="longitud" inputmode="decimal" maxlength="11" data-decimal placeholder="-75.281900">
+                <p class="field-error" hidden></p>
+              </div>
+            </div>
+            <p class="field-hint">En Google Maps: clic derecho sobre el lugar → copia las coordenadas. Huila: latitud 1 a 4, longitud −77 a −74.</p>
+            <button type="button" class="btn btn-ghost btn-sm" id="btnVistaMapa"><span data-icon="map"></span>Ver en el mapa</button>
+            <div id="vistaMapa"></div>
+          </fieldset>
+        </div>
+        <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+          <button type="submit" class="btn btn-green">Enviar a revisión</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ============ FORMULARIO DE PRODUCTO (MENÚ) ============ -->
+  <dialog class="modal" id="modalProducto" aria-labelledby="productoTitulo">
+    <div class="modal-head">
+      <h2 id="productoTitulo">Nuevo producto</h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body">
+      <form id="formProducto" class="form" novalidate>
+        <input type="hidden" name="id">
+        <div class="field">
+          <label for="pSitio">Restaurante o cafetería <span class="req">*</span></label>
+          <select class="select" id="pSitio" name="sitioId" required></select>
+          <p class="field-error" hidden></p>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label for="pNombre">Nombre <span class="req">*</span></label>
+            <input class="input" id="pNombre" name="nombre" maxlength="80" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="pPrecio">Precio (COP) <span class="req">*</span></label>
+            <input class="input" id="pPrecio" name="precio" inputmode="numeric" maxlength="7" data-solo-numeros required placeholder="Ej. 4500">
+            <p class="field-hint">Solo números · 500 a 1.000.000.</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field span-2">
+            <label for="pDescripcion">Descripción</label>
+            <input class="input" id="pDescripcion" name="descripcion" maxlength="300">
+            <p class="field-error" hidden></p>
+          </div>
+        </div>
+        <div id="pImagen"></div>
+        <label class="check"><input type="checkbox" name="disponible" checked> Disponible para ordenar</label>
+        <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+          <button type="submit" class="btn btn-green">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="api.js"></script>
+  <script src="componentes.js"></script>
+  <script src="emprendedor_panel.js"></script>
+</body>
+</html>

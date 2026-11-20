@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFDF9">
+  <meta name="robots" content="noindex">
+  <title>Panel de administración · HuilaConecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-privada="true">
+  <a href="#main" class="skip-link">Saltar al contenido</a>
+
+  <!-- ============ ENCABEZADO ============ -->
+  <header class="app-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="HuilaConecta, ir a la página pública">
+        <span class="brand-mark" data-icon="mountain"></span>
+        <span><span class="brand-name">Huila<span>Conecta</span></span><span class="brand-sub">ADMINISTRACIÓN</span></span>
+      </a>
+      <div class="app-tools">
+        <button type="button" class="theme-toggle" data-tema-toggle role="switch" aria-checked="false"><span data-icon="moon"></span><span class="theme-label">Modo oscuro</span></button>
+        <div class="app-user">
+          <span class="avatar" id="avatar" aria-hidden="true"></span>
+          <span class="app-user-info"><strong id="nombreUsuario">Administrador</strong><span class="muted small">Administrador</span></span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btnSalir" aria-label="Cerrar sesión" title="Cerrar sesión"><span data-icon="logout"></span></button>
+      </div>
+    </div>
+    <div class="container">
+      <nav class="app-tabs" role="tablist" aria-label="Secciones del panel">
+        <button type="button" class="tab" role="tab" id="tab-resumen" aria-controls="sec-resumen" data-tab="resumen"><span data-icon="chart"></span>Resumen</button>
+        <button type="button" class="tab" role="tab" id="tab-usuarios" aria-controls="sec-usuarios" data-tab="usuarios"><span data-icon="users"></span>Usuarios</button>
+        <button type="button" class="tab" role="tab" id="tab-moderacion" aria-controls="sec-moderacion" data-tab="moderacion"><span data-icon="shield"></span>Moderación <span class="count" id="contadorPendientes" hidden>0</span></button>
+        <button type="button" class="tab" role="tab" id="tab-sitios" aria-controls="sec-sitios" data-tab="sitios"><span data-icon="map"></span>Sitios</button>
+        <button type="button" class="tab" role="tab" id="tab-comunidad" aria-controls="sec-comunidad" data-tab="comunidad"><span data-icon="chat"></span>Comunidad</button>
+        <button type="button" class="tab" role="tab" id="tab-guias" aria-controls="sec-guias" data-tab="guias"><span data-icon="guide"></span>Guías</button>
+        <button type="button" class="tab" role="tab" id="tab-cuenta" aria-controls="sec-cuenta" data-tab="cuenta"><span data-icon="gear"></span>Mi cuenta</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="app-main container" tabindex="-1">
+
+    <!-- ============ RESUMEN ============ -->
+    <section id="sec-resumen" class="section" role="tabpanel" aria-labelledby="tab-resumen" hidden>
+      <div class="page-head"><div><h1>Panel de control</h1><p class="muted">Estado general de la plataforma (datos en vivo desde MySQL).</p></div></div>
+      <div class="stats" id="statsResumen"></div>
+      <div class="card card-pad">
+        <h2 class="card-title">Sitios aprobados por categoría</h2>
+        <div class="bar-list" id="barrasCategorias"></div>
+      </div>
+      <div class="card card-pad">
+        <h2 class="card-title">Pendientes de revisión</h2>
+        <div id="resumenPendientes" class="section"></div>
+      </div>
+    </section>
+
+    <!-- ============ USUARIOS (CRUD) ============ -->
+    <section id="sec-usuarios" class="section" role="tabpanel" aria-labelledby="tab-usuarios" hidden>
+      <div class="page-head">
+        <div><h1>Usuarios</h1><p class="muted">Crea, edita, activa o elimina cuentas de cualquier rol.</p></div>
+        <button type="button" class="btn btn-primary" id="btnNuevoUsuario"><span data-icon="plus"></span>Nuevo usuario</button>
+      </div>
+      <div class="toolbar">
+        <div class="input-wrap"><span data-icon="search"></span>
+          <label for="buscarUsuario" class="sr-only">Buscar usuario</label>
+          <input class="input" id="buscarUsuario" type="search" maxlength="80" placeholder="Buscar por nombre, correo o teléfono…"></div>
+        <label for="filtroRol" class="sr-only">Filtrar por rol</label>
+        <select class="select" id="filtroRol">
+          <option value="">Todos los roles</option>
+          <option value="ADMIN">Administradores</option>
+          <option value="EMPRENDEDOR">Emprendedores</option>
+          <option value="TURISTA">Turistas</option>
+        </select>
+        <p class="muted" id="totalUsuarios" aria-live="polite"></p>
+      </div>
+      <div class="card table-wrap">
+        <table class="table">
+          <thead><tr><th scope="col">Usuario</th><th scope="col">Teléfono</th><th scope="col">Rol</th><th scope="col">Estado</th><th scope="col">Registro</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+          <tbody id="tablaUsuarios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ MODERACIÓN DE SITIOS ============ -->
+    <section id="sec-moderacion" class="section" role="tabpanel" aria-labelledby="tab-moderacion" hidden>
+      <div class="page-head"><div><h1>Moderación de sitios</h1><p class="muted">Aprueba o rechaza las publicaciones nuevas o editadas de los emprendedores.</p></div></div>
+      <div id="listaModeracion" class="section"></div>
+    </section>
+
+    <!-- ============ SITIOS: filtros avanzados ============ -->
+    <section id="sec-sitios" class="section" role="tabpanel" aria-labelledby="tab-sitios" hidden>
+      <div class="page-head"><div><h1>Sitios turísticos</h1><p class="muted">Filtra por categoría, estado o texto. Los filtros se aplican en el servidor.</p></div></div>
+      <div class="chip-row" id="filtroCategorias" role="group" aria-label="Filtrar por categoría"></div>
+      <div class="toolbar">
+        <div class="input-wrap"><span data-icon="search"></span>
+          <label for="buscarSitio" class="sr-only">Buscar sitio</label>
+          <input class="input" id="buscarSitio" type="search" maxlength="80" placeholder="Buscar por nombre, municipio o emprendedor…"></div>
+        <label for="filtroEstado" class="sr-only">Filtrar por estado</label>
+        <select class="select" id="filtroEstado">
+          <option value="">Todos los estados</option>
+          <option value="PENDIENTE">Pendientes</option>
+          <option value="APROBADO">Aprobados</option>
+          <option value="RECHAZADO">Rechazados</option>
+        </select>
+        <p class="muted" id="totalSitios" aria-live="polite"></p>
+      </div>
+      <div class="card table-wrap">
+        <table class="table">
+          <thead><tr><th scope="col">Sitio</th><th scope="col">Categoría</th><th scope="col">Emprendedor</th><th scope="col">Precio</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+          <tbody id="tablaSitios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ COMUNIDAD: moderación de contenido ============ -->
+    <section id="sec-comunidad" class="section" role="tabpanel" aria-labelledby="tab-comunidad" hidden>
+      <div class="page-head"><div><h1>Moderación de la comunidad</h1><p class="muted">Revisa publicaciones y comentarios. Ocultar retira el contenido sin borrarlo; eliminar lo borra de la base de datos.</p></div></div>
+      <div class="stats" id="statsComunidad"></div>
+      <div class="toolbar" style="grid-template-columns:auto auto 1fr">
+        <div class="seg" role="radiogroup" aria-label="Tipo de contenido">
+          <label><input type="radio" name="tipoContenido" value="publicaciones" checked><span>Publicaciones</span></label>
+          <label><input type="radio" name="tipoContenido" value="comentarios"><span>Comentarios</span></label>
+        </div>
+        <label for="filtroModeracion" class="sr-only">Filtrar por estado</label>
+        <select class="select" id="filtroModeracion">
+          <option value="">Todo</option>
+          <option value="VISIBLE">Visibles</option>
+          <option value="OCULTA">Ocultos</option>
+        </select>
+      </div>
+      <div id="listaComunidad" class="section"></div>
+    </section>
+
+    <!-- ============ GUÍAS (CRUD) ============ -->
+    <section id="sec-guias" class="section" role="tabpanel" aria-labelledby="tab-guias" hidden>
+      <div class="page-head">
+        <div><h1>Guías turísticos</h1><p class="muted">Información que ven los turistas en su portal.</p></div>
+        <button type="button" class="btn btn-primary" id="btnNuevoGuia"><span data-icon="plus"></span>Nuevo guía</button>
+      </div>
+      <div class="card table-wrap">
+        <table class="table">
+          <thead><tr><th scope="col">Guía</th><th scope="col">Municipios</th><th scope="col">Idiomas</th><th scope="col">Tarifa/día</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+          <tbody id="tablaGuias"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ MI CUENTA ============ -->
+    <section id="sec-cuenta" class="section" role="tabpanel" aria-labelledby="tab-cuenta" hidden>
+      <div class="page-head"><div><h1>Mi cuenta</h1><p class="muted">Foto de perfil, datos y contraseña del administrador.</p></div></div>
+      <div id="cuentaAdmin" class="section"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container">HuilaConecta · Panel de administración</div></footer>
+
+  <!-- ============ FORMULARIO DE USUARIO ============ -->
+  <dialog class="modal" id="modalUsuario" aria-labelledby="usuarioTitulo">
+    <div class="modal-head">
+      <h2 id="usuarioTitulo">Nuevo usuario</h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body">
+      <form id="formUsuario" class="form" novalidate>
+        <input type="hidden" name="id">
+        <div class="form-grid cols-2">
+          <div class="field span-2">
+            <label for="uNombre">Nombre completo <span class="req">*</span></label>
+            <input class="input" id="uNombre" name="nombre" maxlength="80" data-solo-letras autocomplete="off" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="uCorreo">Correo <span class="req">*</span></label>
+            <input class="input" id="uCorreo" name="correo" type="email" maxlength="120" autocomplete="off" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="uTelefono">Celular <span class="req">*</span></label>
+            <input class="input" id="uTelefono" name="telefono" type="tel" inputmode="numeric" maxlength="10" data-solo-numeros placeholder="10 dígitos" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="uRol">Rol <span class="req">*</span></label>
+            <select class="select" id="uRol" name="rol" required>
+              <option value="TURISTA">Turista</option>
+              <option value="EMPRENDEDOR">Emprendedor</option>
+              <option value="ADMIN">Administrador</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="label">Estado</span>
+            <label class="check" style="min-height:46px"><input type="checkbox" name="activo" checked> Cuenta activa</label>
+          </div>
+          <div class="field span-2">
+            <label for="uPassword" id="uPasswordLabel">Contraseña <span class="req">*</span></label>
+            <input class="input" id="uPassword" name="password" type="password" maxlength="64" autocomplete="new-password" aria-describedby="uReglas">
+            <p class="field-hint" id="uPasswordHint" hidden>Déjala vacía para conservar la contraseña actual.</p>
+            <p class="field-error" hidden></p>
+          </div>
+          <ul class="pw-rules span-2" id="uReglas" aria-live="polite"></ul>
+        </div>
+        <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+          <button type="submit" class="btn btn-green">Guardar usuario</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ============ FORMULARIO DE GUÍA ============ -->
+  <dialog class="modal modal-lg" id="modalGuia" aria-labelledby="guiaTitulo">
+    <div class="modal-head">
+      <h2 id="guiaTitulo">Nuevo guía</h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body">
+      <form id="formGuia" class="form" novalidate>
+        <input type="hidden" name="id">
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label for="gNombre">Nombre completo <span class="req">*</span></label>
+            <input class="input" id="gNombre" name="nombre" maxlength="80" data-solo-letras required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gEspecialidad">Especialidad <span class="req">*</span></label>
+            <input class="input" id="gEspecialidad" name="especialidad" maxlength="100" placeholder="Ej. Astroturismo y desierto" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gIdiomas">Idiomas <span class="req">*</span></label>
+            <input class="input" id="gIdiomas" name="idiomas" maxlength="120" data-solo-letras placeholder="Español, Inglés" required>
+            <p class="field-hint">Separados por comas.</p><p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gMunicipios">Municipios <span class="req">*</span></label>
+            <input class="input" id="gMunicipios" name="municipios" maxlength="200" data-solo-letras placeholder="Villavieja, Neiva" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gExperiencia">Años de experiencia <span class="req">*</span></label>
+            <input class="input" id="gExperiencia" name="experienciaAnios" inputmode="numeric" maxlength="2" data-solo-numeros required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gTarifa">Tarifa por día (COP) <span class="req">*</span></label>
+            <input class="input" id="gTarifa" name="tarifaDia" inputmode="numeric" maxlength="7" data-solo-numeros placeholder="Ej. 180000" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gCalificacion">Calificación (1.0 a 5.0) <span class="req">*</span></label>
+            <input class="input" id="gCalificacion" name="calificacion" inputmode="decimal" maxlength="3" data-decimal placeholder="4.8" required>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gTelefono">Celular <span class="req">*</span></label>
+            <input class="input" id="gTelefono" name="telefono" type="tel" inputmode="numeric" maxlength="10" data-solo-numeros required>
+            <p class="field-hint">Solo números · 10 dígitos.</p><p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gCorreo">Correo (opcional)</label>
+            <input class="input" id="gCorreo" name="correo" type="email" maxlength="120">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="gRnt">RNT (opcional)</label>
+            <input class="input" id="gRnt" name="rnt" inputmode="numeric" maxlength="10" data-solo-numeros placeholder="Registro Nacional de Turismo">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field span-2">
+            <label for="gDescripcion">Descripción <span class="req">*</span></label>
+            <textarea class="textarea" id="gDescripcion" name="descripcion" maxlength="1000" required></textarea>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="span-2" id="gFoto"></div>
+          <label class="check span-2"><input type="checkbox" name="activo" checked> Visible para los turistas</label>
+        </div>
+        <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+          <button type="submit" class="btn btn-green">Guardar guía</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="api.js"></script>
+  <script src="componentes.js"></script>
+  <script src="admin_dashboard.js"></script>
+</body>
+</html>

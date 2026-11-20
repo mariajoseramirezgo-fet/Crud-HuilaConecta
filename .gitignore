@@ -1,0 +1,6 @@
+backend/node_modules/
+backend/.env
+.idea/
+.vscode/
+*.iml
+.DS_Store

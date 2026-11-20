@@ -1,0 +1,125 @@
+/* ==============================================================
+   HuilaConecta · index.css
+   Estilos PROPIOS de la landing page (index.html): encabezado
+   público, hero, secciones, roles, pasos y ventana de acceso.
+   Depende de las variables definidas en styles.css.
+   ============================================================== */
+
+/* ---------- Encabezado público ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.site-header.scrolled { border-bottom-color: var(--border); }
+.site-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 68px; }
+.site-nav { display: none; gap: 26px; font-weight: 600; font-size: .92rem; }
+.site-nav a { text-decoration: none; color: var(--text-muted); }
+.site-nav a:hover { color: var(--brand-strong); }
+.site-actions { display: flex; align-items: center; gap: 8px; }
+.site-actions .theme-toggle { padding: 0; width: 44px; justify-content: center; }
+.hide-xs { display: none; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; color: #fff; }
+.hero-bg {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(100deg, rgb(15 23 42 / .92) 0%, rgb(15 23 42 / .65) 55%, rgb(15 23 42 / .25) 100%),
+    url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1800&q=80') center / cover no-repeat;
+}
+.hero-content { padding-block: 56px 48px; display: grid; gap: 18px; max-width: var(--container); }
+.hero h1 { font-size: clamp(2.1rem, 8vw, 4.2rem); font-weight: 800; max-width: 14ch; }
+.hero h1 span { color: var(--sun); }
+.hero-lead { font-size: 1.05rem; max-width: 52ch; color: #E2E8F0; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.hero-cta .btn { flex: 1 1 200px; }
+.btn-light { background: rgb(255 255 255 / .14); color: #fff; border-color: rgb(255 255 255 / .35); }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 14px 30px; margin: 14px 0 0; }
+.hero-stats div { display: flex; flex-direction: column-reverse; }
+.hero-stats dt { font-size: .78rem; color: #CBD5E1; }
+.hero-stats dd { margin: 0; font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--sun); }
+
+/* ---------- Bloques de contenido ---------- */
+.block { padding-block: 52px; }
+.block-alt { background: var(--surface-2); }
+.block-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.block-head h2 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-top: 4px; }
+.block-head p { margin-top: 6px; }
+.eyebrow { font-size: .74rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--brand-strong); }
+:root[data-theme="dark"] .eyebrow { color: #FB923C; }
+#filtrosLanding { margin-bottom: 18px; }
+.center-cta { display: flex; justify-content: center; margin-top: 26px; }
+
+/* ---------- Roles ---------- */
+.roles { display: grid; gap: 16px; grid-template-columns: 1fr; }
+.role-card { padding: 22px; display: grid; gap: 10px; align-content: start; }
+.role-card h3 { font-size: 1.25rem; }
+.role-card .btn { justify-self: start; margin-top: 6px; }
+.role-icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; }
+.role-icon .icon { width: 26px; height: 26px; }
+.role-turista { background: var(--forest-soft); color: var(--forest); }
+.role-emprendedor { background: var(--brand-soft); color: var(--brand-strong); }
+.role-admin { background: var(--sun-soft); color: #6B4E00; }
+:root[data-theme="dark"] .role-admin { color: #FDE68A; }
+
+/* ---------- Pasos ---------- */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr; }
+.steps li { padding: 20px; display: grid; gap: 6px; }
+.steps h3 { font-size: 1.1rem; }
+.step-n { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-family: var(--font-display); font-weight: 800; }
+:root[data-theme="dark"] .step-n { background: var(--sun); color: var(--ink); }
+
+/* ---------- Llamado final ---------- */
+.cta-final {
+  margin-block: 10px 52px; padding: 28px 22px; border-radius: var(--radius-lg);
+  background: var(--sun-soft); color: var(--text);
+  display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
+}
+.cta-final h2 { font-size: clamp(1.4rem, 4.5vw, 2rem); }
+.cta-final p { margin-top: 6px; color: var(--text-muted); }
+
+/* ---------- Ventana de acceso ---------- */
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 18px; border-radius: 14px; background: var(--surface-2); }
+.auth-tabs button { min-height: 44px; border: 0; border-radius: 10px; background: transparent; font-weight: 700; color: var(--text-muted); }
+.auth-tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.demo-box { margin-top: 6px; padding: 14px; border-radius: 14px; background: var(--forest-soft); display: grid; gap: 10px; }
+.demo-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-list .chip { min-height: 38px; font-size: .8rem; }
+.role-pick { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.role-pick legend { grid-column: 1 / -1; margin-bottom: 8px; padding: 0; }
+.role-pick label { cursor: pointer; }
+.role-pick input { position: absolute; opacity: 0; pointer-events: none; }
+.role-pick label > span {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+  min-height: 84px; justify-content: center; padding: 12px 8px;
+  border: 2px solid var(--border); border-radius: 14px; font-weight: 600; font-size: .85rem;
+}
+.role-pick input:checked + span { border-color: var(--forest); background: var(--forest-soft); }
+.role-pick input:focus-visible + span { outline: 3px solid var(--forest); outline-offset: 2px; }
+
+/* Detalle de destino */
+.destino-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: var(--radius); margin-bottom: 14px; background: var(--surface-2); }
+
+/* ---------- Responsive de la landing ---------- */
+@media (min-width: 480px) {
+  .hide-xs { display: inline-flex; }
+  .hero-cta .btn { flex: 0 0 auto; }
+}
+@media (min-width: 768px) {
+  .hero-content { padding-block: 96px 80px; }
+  .roles { grid-template-columns: repeat(3, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .cta-final { flex-direction: row; align-items: center; justify-content: space-between; padding: 36px 40px; }
+  .block { padding-block: 72px; }
+}
+@media (min-width: 1024px) {
+  .site-nav { display: flex; }
+  .steps { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------- v2: enlace con estilo de texto y tarjetas de guías en la landing ---------- */
+.link-btn { border: 0; background: none; padding: 0; font-weight: 700; color: var(--forest); text-decoration: underline; cursor: pointer; }
+.aviso-sesion { margin-bottom: 14px; }

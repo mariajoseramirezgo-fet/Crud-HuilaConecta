@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFDF9">
+  <meta name="robots" content="noindex">
+  <title>Explorar el Huila · HuilaConecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-privada="true">
+  <a href="#main" class="skip-link">Saltar al contenido</a>
+
+  <header class="app-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="HuilaConecta, ir a la página pública">
+        <span class="brand-mark" data-icon="mountain"></span>
+        <span><span class="brand-name">Huila<span>Conecta</span></span><span class="brand-sub">TU PRÓXIMA HISTORIA</span></span>
+      </a>
+      <div class="app-tools">
+        <button type="button" class="theme-toggle" data-tema-toggle role="switch" aria-checked="false"><span data-icon="moon"></span><span class="theme-label">Modo oscuro</span></button>
+        <div class="app-user">
+          <span class="avatar" id="avatar" aria-hidden="true"></span>
+          <span class="app-user-info"><strong id="nombreUsuario">Turista</strong><span class="muted small">Turista / Local</span></span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btnSalir" aria-label="Cerrar sesión" title="Cerrar sesión"><span data-icon="logout"></span></button>
+      </div>
+    </div>
+    <div class="container">
+      <nav class="app-tabs" role="tablist" aria-label="Secciones del portal">
+        <button type="button" class="tab" role="tab" id="tab-explorar" aria-controls="sec-explorar" data-tab="explorar"><span data-icon="compass"></span>Explorar</button>
+        <button type="button" class="tab" role="tab" id="tab-guias" aria-controls="sec-guias" data-tab="guias"><span data-icon="guide"></span>Guías</button>
+        <button type="button" class="tab" role="tab" id="tab-cafeteria" aria-controls="sec-cafeteria" data-tab="cafeteria"><span data-icon="coffee"></span>Comida sin fila</button>
+        <button type="button" class="tab" role="tab" id="tab-comunidad" aria-controls="sec-comunidad" data-tab="comunidad"><span data-icon="chat"></span>Comunidad</button>
+        <button type="button" class="tab" role="tab" id="tab-favoritos" aria-controls="sec-favoritos" data-tab="favoritos"><span data-icon="heart"></span>Favoritos <span class="count" id="contadorFavoritos" hidden>0</span></button>
+        <button type="button" class="tab" role="tab" id="tab-perfil" aria-controls="sec-perfil" data-tab="perfil"><span data-icon="user"></span>Mi perfil</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="app-main container" tabindex="-1">
+
+    <!-- ============ EXPLORAR ============ -->
+    <section id="sec-explorar" class="section" role="tabpanel" aria-labelledby="tab-explorar" hidden>
+      <div class="page-head"><div><span class="badge">☀ Hecho de montañas e historias</span><h1 id="saludo" style="margin-top:10px">¡Hola!</h1><p class="muted">El Huila te espera. ¿Qué descubrimos hoy?</p></div></div>
+      <div class="card" style="padding:8px">
+        <div class="input-wrap"><span data-icon="search"></span>
+          <label for="buscador" class="sr-only">Buscar destinos, sabores o experiencias</label>
+          <input class="input" id="buscador" type="search" maxlength="100" autocomplete="off" placeholder="Tatacoa, café, Pitalito, hospedaje…" style="border:0"></div>
+      </div>
+      <div class="chip-row" id="filtrosCategoria" role="group" aria-label="Filtrar por categoría"></div>
+      <div class="toolbar">
+        <p class="muted" id="totalResultados" aria-live="polite"></p>
+        <label for="orden" class="sr-only">Ordenar resultados</label>
+        <select class="select" id="orden">
+          <option value="recientes">Más recientes</option>
+          <option value="precio-asc">Precio: menor a mayor</option>
+          <option value="precio-desc">Precio: mayor a menor</option>
+          <option value="nombre">Nombre (A-Z)</option>
+        </select>
+      </div>
+      <div class="grid-cards" id="catalogo"><p class="empty">Cargando catálogo…</p></div>
+    </section>
+
+    <!-- ============ GUÍAS TURÍSTICOS ============ -->
+    <section id="sec-guias" class="section" role="tabpanel" aria-labelledby="tab-guias" hidden>
+      <div class="page-head"><div><h1>Guías turísticos</h1><p class="muted">Personas de la región que conocen cada rincón del Huila.</p></div></div>
+      <div class="card" style="padding:8px">
+        <div class="input-wrap"><span data-icon="search"></span>
+          <label for="buscarGuia" class="sr-only">Buscar guía</label>
+          <input class="input" id="buscarGuia" type="search" maxlength="80" placeholder="Municipio, idioma o especialidad…" style="border:0"></div>
+      </div>
+      <div class="grid-cards" id="listaGuias"><p class="empty">Cargando guías…</p></div>
+    </section>
+
+    <!-- ============ COMIDA SIN FILA ============ -->
+    <section id="sec-cafeteria" class="section" role="tabpanel" aria-labelledby="tab-cafeteria" hidden>
+      <div class="page-head"><div><h1>Comida sin fila</h1><p class="muted">Ordena, paga en línea (simulado) y recoge sin esperar.</p></div></div>
+      <div class="sub-tabs" role="group" aria-label="Secciones">
+        <button type="button" class="chip" data-sub="ordenar" aria-pressed="true">Ordenar</button>
+        <button type="button" class="chip" data-sub="pedidos" aria-pressed="false">Mis pedidos <span class="count" id="contadorPedidos" hidden>0</span></button>
+      </div>
+
+      <div data-subpanel="ordenar" class="section">
+        <div class="field" style="max-width:520px">
+          <label for="selRestaurante">Restaurante o cafetería</label>
+          <select class="select" id="selRestaurante"></select>
+        </div>
+        <div class="cafe-layout">
+          <div class="section">
+            <div id="infoRestaurante"></div>
+            <div class="menu-list" id="menu"></div>
+          </div>
+          <aside class="card cart" aria-labelledby="carritoTitulo">
+            <h2 id="carritoTitulo" class="card-title"><span data-icon="cart"></span>Tu pedido</h2>
+            <ul class="cart-lines" id="carrito"></ul>
+            <div class="cart-total"><span>Total</span><span id="carritoTotal">$ 0</span></div>
+            <button type="button" class="btn btn-primary btn-block" id="btnPagar" disabled><span data-icon="card"></span>Ir a pagar</button>
+            <p class="muted small">El precio final lo calcula el servidor al confirmar.</p>
+          </aside>
+        </div>
+      </div>
+
+      <div data-subpanel="pedidos" class="section" hidden>
+        <div id="listaPedidos" class="section"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMUNIDAD ============ -->
+    <section id="sec-comunidad" class="section" role="tabpanel" aria-labelledby="tab-comunidad" hidden>
+      <div class="page-head"><div><h1>Comunidad</h1><p class="muted">Novedades de los emprendedores. Comenta y dale "Me gusta".</p></div></div>
+      <div id="comunidad" class="section"></div>
+    </section>
+
+    <!-- ============ FAVORITOS ============ -->
+    <section id="sec-favoritos" class="section" role="tabpanel" aria-labelledby="tab-favoritos" hidden>
+      <div class="page-head"><div><h1>Mis favoritos</h1><p class="muted">Los lugares que guardaste para tu próxima ruta.</p></div></div>
+      <div class="grid-cards" id="listaFavoritos"></div>
+    </section>
+
+    <!-- ============ PERFIL ============ -->
+    <section id="sec-perfil" class="section" role="tabpanel" aria-labelledby="tab-perfil" hidden>
+      <div class="page-head"><div><h1>Mi perfil</h1><p class="muted">Tu cuenta, tu galería de viaje y tu seguridad.</p></div></div>
+
+      <div class="card card-pad">
+        <div class="page-head" style="margin-bottom:14px"><h2 class="card-title" style="margin:0"><span data-icon="image"></span>Mi galería de viaje</h2>
+          <span class="muted small" id="totalFotos"></span></div>
+        <form id="formFoto" class="form" novalidate>
+          <div id="selectorGaleria"></div>
+          <div class="field">
+            <label for="fDescripcion">Descripción (opcional)</label>
+            <input class="input" id="fDescripcion" name="descripcion" maxlength="200" placeholder="Ej. Atardecer en la Tatacoa">
+            <p class="field-error" hidden></p>
+          </div>
+          <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+          <div><button type="submit" class="btn btn-green"><span data-icon="plus"></span>Agregar a mi galería</button></div>
+        </form>
+        <div class="gallery" id="galeria" style="margin-top:18px"></div>
+      </div>
+
+      <div id="cuenta" class="section"></div>
+
+      <div class="card card-pad">
+        <h2 class="card-title"><span data-icon="trash"></span>Eliminar mi cuenta</h2>
+        <p class="muted" style="margin:-6px 0 14px">Se borrarán tu perfil, galería, favoritos y comentarios. Tus pedidos quedan en el historial del restaurante sin tus datos de contacto.</p>
+        <button type="button" class="btn btn-danger" id="btnEliminarCuenta">Eliminar mi cuenta</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container">HuilaConecta · Viajar también es conectar.<br>Precios ilustrativos en COP · pagos simulados con fines académicos.</div></footer>
+
+  <!-- ============ DETALLE DE SITIO / RESTAURANTE ============ -->
+  <dialog class="modal modal-lg" id="modalDetalle" aria-labelledby="detalleTitulo">
+    <div class="modal-head">
+      <h2 id="detalleTitulo"></h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body" id="detalleContenido"></div>
+  </dialog>
+
+  <!-- ============ DETALLE DE GUÍA ============ -->
+  <dialog class="modal" id="modalGuia" aria-labelledby="guiaTitulo">
+    <div class="modal-head">
+      <h2 id="guiaTitulo"></h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body" id="guiaContenido"></div>
+  </dialog>
+
+  <!-- ============ PASARELA DE PAGO SIMULADA ============ -->
+  <dialog class="modal" id="modalPago" aria-labelledby="pagoTitulo">
+    <div class="modal-head">
+      <h2 id="pagoTitulo">Pagar pedido</h2>
+      <button type="button" class="btn btn-soft btn-icon" data-cerrar aria-label="Cerrar ventana"><span data-icon="close"></span></button>
+    </div>
+    <div class="modal-body">
+      <form id="formPago" class="form" novalidate>
+        <div class="card card-pad" style="box-shadow:none">
+          <ul class="cart-lines" id="resumenPago"></ul>
+          <div class="cart-total"><span>Total a pagar</span><span id="totalPago"></span></div>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label for="pgRecoger">¿Cuándo pasas a recoger? <span class="req">*</span></label>
+            <select class="select" id="pgRecoger" name="recoger">
+              <option value="10">En 10 minutos</option><option value="15" selected>En 15 minutos</option>
+              <option value="20">En 20 minutos</option><option value="30">En 30 minutos</option>
+              <option value="45">En 45 minutos</option><option value="60">En 1 hora</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pgNotas">Notas para la cocina</label>
+            <input class="input" id="pgNotas" name="notas" maxlength="200" placeholder="Ej. sin azúcar">
+            <p class="field-error" hidden></p>
+          </div>
+        </div>
+
+        <fieldset class="pay-methods">
+          <legend class="label">Método de pago <span class="req">*</span></legend>
+          <label><input type="radio" name="metodo" value="TARJETA" checked><span><span data-icon="card"></span>Tarjeta</span></label>
+          <label><input type="radio" name="metodo" value="NEQUI"><span><span data-icon="phone"></span>Nequi</span></label>
+          <label><input type="radio" name="metodo" value="EFECTIVO"><span><span data-icon="coffee"></span>Efectivo al recoger</span></label>
+        </fieldset>
+
+        <div data-metodo="TARJETA" class="form-grid cols-2">
+          <div class="field span-2">
+            <label for="pgNumero">Número de tarjeta <span class="req">*</span></label>
+            <input class="input" id="pgNumero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="19" data-formato="tarjeta" placeholder="0000 0000 0000 0000">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field span-2">
+            <label for="pgTitular">Titular <span class="req">*</span></label>
+            <input class="input" id="pgTitular" name="titular" autocomplete="cc-name" maxlength="60" data-solo-letras placeholder="Como aparece en la tarjeta">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="pgVence">Vence (MM/AA) <span class="req">*</span></label>
+            <input class="input" id="pgVence" name="vence" inputmode="numeric" autocomplete="cc-exp" maxlength="5" data-formato="vencimiento" placeholder="08/29">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="pgCvv">CVV <span class="req">*</span></label>
+            <input class="input" id="pgCvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="3" data-solo-numeros placeholder="•••">
+            <p class="field-error" hidden></p>
+          </div>
+        </div>
+        <div data-metodo="NEQUI" class="field" hidden>
+          <label for="pgNequi">Celular Nequi <span class="req">*</span></label>
+          <input class="input" id="pgNequi" name="nequi" type="tel" inputmode="numeric" maxlength="10" data-solo-numeros placeholder="3001234567">
+          <p class="field-hint">10 dígitos, empieza por 3.</p>
+          <p class="field-error" hidden></p>
+        </div>
+        <p data-metodo="EFECTIVO" class="note note-info" hidden>Pagas en caja al recoger tu pedido. El restaurante lo prepara igual sin que hagas fila.</p>
+
+        <p class="sim-note"><strong>Pasarela simulada (proyecto académico).</strong> No se realiza ningún cobro real y nunca se guarda el número completo ni el CVV. Tarjeta de prueba aprobada: <code>4242 4242 4242 4242</code> · rechazada: <code>4000 0000 0000 0002</code>.</p>
+        <p class="form-alert" role="alert" tabindex="-1" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-cerrar>Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btnConfirmarPago">Pagar</button>
+        </div>
+      </form>
+      <div id="reciboPago" hidden></div>
+    </div>
+  </dialog>
+
+  <script src="api.js"></script>
+  <script src="componentes.js"></script>
+  <script src="turista_portal.js"></script>
+</body>
+</html>
